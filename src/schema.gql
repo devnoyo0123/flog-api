@@ -1,0 +1,109 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Comment {
+  content: String!
+  detailComments: [Comment!]!
+
+  """id"""
+  id: Int!
+  parentComment: Comment!
+  post: Post!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateFamilyInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePersonInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePostInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Family {
+  Persons: [Person!]!
+
+  """id"""
+  id: Int!
+  name: String!
+  posts: [Post!]!
+  profileImageUrl: String!
+}
+
+type Mutation {
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  createFamily(createFamilyInput: CreateFamilyInput!): Family!
+  createPerson(createPersonInput: CreatePersonInput!): Person!
+  createPost(createPostInput: CreatePostInput!): Post!
+  removeComment(id: Int!): Comment!
+  removeFamily(id: Int!): Family!
+  removePerson(id: Int!): Person!
+  removePost(id: Int!): Post!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  updateFamily(updateFamilyInput: UpdateFamilyInput!): Family!
+  updatePerson(updatePersonInput: UpdatePersonInput!): Person!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+}
+
+type Person {
+  families: [Family!]!
+
+  """id"""
+  id: Int!
+  name: String!
+  profileImageUrl: String!
+}
+
+type Post {
+  comments: [Comment!]!
+  content: String!
+  family: Family!
+  id: Int!
+  photoUrls: [String!]!
+  videoUrls: [String!]!
+}
+
+type Query {
+  comment(id: Int!): Comment!
+  comments: [Comment!]!
+  family(id: Int!): Family!
+  person(id: Int!): Person!
+  post(id: Int!): Post!
+  posts: [Post!]!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateFamilyInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePersonInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePostInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
