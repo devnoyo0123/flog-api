@@ -3,11 +3,11 @@ import { Post } from 'src/modules/posts/entities/post.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ChildComment } from './child-comment.entity';
 
 @Entity()
 @ObjectType()
@@ -24,16 +24,7 @@ export class Comment {
   @Field(() => Post)
   post: Post;
 
-  /**
-   * 상위코드 다대다 셀프 조인
-   * https://github.com/typeorm/typeorm/blob/master/docs/relations-faq.md
-   */
-  @OneToMany(() => Comment, (comment) => comment.parentComment)
-  @Field(() => [Comment])
-  detailComments: Comment[];
-
-  @ManyToOne(() => Comment, (comment) => comment.detailComments)
-  @JoinColumn([{ name: 'parent_id', referencedColumnName: 'id' }])
-  @Field(() => Comment)
-  parentComment: Comment;
+  @OneToMany(() => ChildComment, (childComment) => childComment.parentComment)
+  @Field(() => [ChildComment])
+  childComments: ChildComment[];
 }

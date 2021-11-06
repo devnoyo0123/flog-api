@@ -2,13 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Comment {
+type ChildComment {
   content: String!
-  detailComments: [Comment!]!
 
   """id"""
   id: Int!
   parentComment: Comment!
+}
+
+type Comment {
+  childComments: [ChildComment!]!
+  content: String!
+
+  """id"""
+  id: Int!
   post: Post!
 }
 
@@ -63,6 +70,7 @@ type Person {
   """id"""
   id: Int!
   name: String!
+  posts: [Post!]!
   profileImageUrl: String!
 }
 
@@ -71,8 +79,10 @@ type Post {
   content: String!
   family: Family!
   id: Int!
+  person: Person!
   photoUrls: [String!]!
   videoUrls: [String!]!
+  viewCount: String!
 }
 
 type Query {
