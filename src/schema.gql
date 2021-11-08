@@ -35,8 +35,13 @@ input CreatePersonInput {
 }
 
 input CreatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  content: String!
+  familyId: Int!
+  personId: Int!
+  photoUrls: [String!]!
+  title: String!
+  videoUrls: [String!]!
+  viewCount: Int!
 }
 
 type Family {
@@ -46,7 +51,7 @@ type Family {
   id: Int!
   name: String!
   posts: [Post!]!
-  profileImageUrl: String!
+  profileImageUrl: [String!]!
 }
 
 type Mutation {
@@ -71,7 +76,7 @@ type Person {
   id: Int!
   name: String!
   posts: [Post!]!
-  profileImageUrl: String!
+  profileImageUrl: [String!]!
 }
 
 type Post {
@@ -81,6 +86,7 @@ type Post {
   id: Int!
   person: Person!
   photoUrls: [String!]!
+  title: String!
   videoUrls: [String!]!
   viewCount: String!
 }
@@ -113,7 +119,12 @@ input UpdatePersonInput {
 }
 
 input UpdatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  content: String
+  familyId: Int
   id: Int!
+  personId: Int
+  photoUrls: [String!]
+  title: String
+  videoUrls: [String!]
+  viewCount: Int
 }

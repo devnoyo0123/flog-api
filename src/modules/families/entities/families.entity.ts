@@ -15,8 +15,8 @@ export class Family {
   @Field()
   name: string;
 
-  @Column()
-  @Field()
+  @Column({ type: 'jsonb', nullable: true })
+  @Field(() => [String])
   profileImageUrl: string;
 
   @OneToMany(() => FamilyToPerson, (familyToPerson) => familyToPerson.person)

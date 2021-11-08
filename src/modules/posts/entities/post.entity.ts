@@ -19,6 +19,10 @@ export class Post {
 
   @Column({ type: 'text', nullable: true })
   @Field(() => String)
+  title: string;
+
+  @Column({ type: 'text', nullable: true })
+  @Field(() => String)
   content: string;
 
   @Column({ type: 'jsonb' })
