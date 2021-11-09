@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,8 +24,20 @@ export class PostsService {
     create(dto: ${JSON.stringify(createPostInput)}`);
     const familyId = createPostInput.familyId;
     const family = await this.familiesRepository.findById(familyId);
-    const personId = createPostInput.familyId;
+    if (family === undefined) {
+      throw new HttpException(
+        `id: ${familyId}인 가족이 존재하지 않습니다.`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const personId = createPostInput.personId;
     const person = await this.personRepository.findById(personId);
+    if (person === undefined) {
+      throw new HttpException(
+        `id: ${personId}인 가족이 존재하지 않습니다.`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.postsRepository.createOne(createPostInput, family, person);
   }
 
