@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsRepository } from './posts.repository';
 import { FamiliesRepository } from '../families/families.repository';
 import { PersonRepository } from '../person/person.repository';
+import { CommentsRepository } from '../comments/comments.repository';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { PersonRepository } from '../person/person.repository';
       PostsRepository,
       FamiliesRepository,
       PersonRepository,
+      CommentsRepository,
     ]),
   ],
   providers: [PostsResolver, PostsService],

@@ -25,4 +25,16 @@ export class PostsRepository extends Repository<Post> {
     this.logger.debug(`포스트 생성 결과 : ${JSON.stringify(savedPost)}`);
     return savedPost;
   }
+
+  findById(id: number) {
+    return this.findOne(id);
+  }
+
+  async findAll() {
+    return this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.person', 'person')
+      .leftJoinAndSelect('post.family', 'family')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .getMany();
+  }
 }

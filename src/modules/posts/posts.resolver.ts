@@ -1,12 +1,26 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CommentsRepository } from '../comments/comments.repository';
 
 @Resolver(() => Post)
 export class PostsResolver {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    @InjectRepository(CommentsRepository)
+    private commentsRepository: CommentsRepository,
+  ) {}
 
   @Mutation(() => Post)
   createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
@@ -19,7 +33,7 @@ export class PostsResolver {
   }
 
   @Query(() => Post, { name: 'post' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findPost(@Args('postId', { type: () => Int }) id: number) {
     return this.postsService.findOne(id);
   }
 
@@ -31,5 +45,10 @@ export class PostsResolver {
   @Mutation(() => Post)
   removePost(@Args('id', { type: () => Int }) id: number) {
     return this.postsService.remove(id);
+  }
+
+  @ResolveField()
+  async comments(@Parent() post: Post) {
+    return await this.commentsRepository.findByPost(post);
   }
 }

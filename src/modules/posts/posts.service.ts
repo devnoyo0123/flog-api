@@ -41,12 +41,17 @@ export class PostsService {
     return this.postsRepository.createOne(createPostInput, family, person);
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    const foundPosts = await this.postsRepository.findAll();
+    return foundPosts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: number) {
+    const foundPost = await this.postsRepository.findById(id);
+    if (foundPost === undefined) {
+      return null;
+    }
+    return foundPost;
   }
 
   update(id: number, updatePostInput: UpdatePostInput) {
