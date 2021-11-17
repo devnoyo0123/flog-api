@@ -4,6 +4,7 @@ import { CreatePostInput } from './dto/create-post.input';
 import { Logger } from '@nestjs/common';
 import { Family } from '../families/entities/families.entity';
 import { Person } from '../person/entities/person.entity';
+import { Comment } from '../comments/entities/comment.entity';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {
@@ -26,11 +27,22 @@ export class PostsRepository extends Repository<Post> {
     return savedPost;
   }
 
-  findById(id: number) {
+  findById(id: number): Promise<Post> {
     return this.findOne(id);
   }
 
-  async findAll() {
+  async batchComments(postIds: readonly number[]): Promise<Comment[][]> {
+    const posts = await this.createQueryBuilder('post')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .where(`post.id IN (:...postIds)`, { postIds })
+      .getMany();
+
+    const postMap: { [key: string]: Comment[] } = {};
+    posts.forEach((post: Post) => (postMap[post.id] = post.comments));
+    return postIds.map((id) => postMap[id]);
+  }
+
+  async findAll(): Promise<Post[]> {
     return this.createQueryBuilder('post')
       .leftJoinAndSelect('post.person', 'person')
       .leftJoinAndSelect('post.family', 'family')

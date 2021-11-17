@@ -13,14 +13,20 @@ import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentsRepository } from '../comments/comments.repository';
+import { Comment } from '../comments/entities/comment.entity';
+import * as DataLoader from 'dataloader';
+import { createLoader } from './loader/posts.loader';
 
 @Resolver(() => Post)
 export class PostsResolver {
+  postsLoader: DataLoader<number, Comment[]>;
   constructor(
     private readonly postsService: PostsService,
     @InjectRepository(CommentsRepository)
     private commentsRepository: CommentsRepository,
-  ) {}
+  ) {
+    this.postsLoader = createLoader(postsService);
+  }
 
   @Mutation(() => Post)
   createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
@@ -48,7 +54,7 @@ export class PostsResolver {
   }
 
   @ResolveField()
-  async comments(@Parent() post: Post) {
-    return await this.commentsRepository.findByPost(post);
+  comments(@Parent() post: Post): Promise<Comment[]> {
+    return this.postsLoader.load(post.id);
   }
 }

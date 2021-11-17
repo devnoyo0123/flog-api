@@ -42,8 +42,7 @@ export class PostsService {
   }
 
   async findAll() {
-    const foundPosts = await this.postsRepository.findAll();
-    return foundPosts;
+    return await this.postsRepository.findAll();
   }
 
   async findOne(id: number) {
@@ -60,5 +59,9 @@ export class PostsService {
 
   remove(id: number) {
     return `This action removes a #${id} post`;
+  }
+
+  async batchComments(postIds: readonly number[]) {
+    return this.postsRepository.batchComments(postIds);
   }
 }
