@@ -37,7 +37,7 @@ export class PostsResolver {
     return this.postsService.findAll();
   }
 
-  @Query(() => Post, { name: 'post' })
+  @Query(() => Post, { name: 'post', nullable: true })
   findPost(@Args('postId', { type: () => Int }) id: number) {
     return this.postsService.findOne(id);
   }

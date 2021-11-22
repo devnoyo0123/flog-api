@@ -96,7 +96,7 @@ type Query {
   comments: [Comment!]!
   family(id: Int!): Family!
   person(id: Int!): Person!
-  post(postId: Int!): Post!
+  post(postId: Int!): Post
   posts: [Post!]!
 }
 

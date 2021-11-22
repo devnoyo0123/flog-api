@@ -44,13 +44,18 @@ export class PostsRepository extends Repository<Post> {
   }
 
   findById(id: number): Promise<Post> {
-    return this.findOne(id);
+    return this.findOne(id, {
+      where: {
+        deletedAt: null,
+      },
+    });
   }
 
   async batchComments(postIds: readonly number[]): Promise<Comment[][]> {
     const posts = await this.createQueryBuilder('post')
       .leftJoinAndSelect('post.comments', 'comments')
-      .where(`post.id IN (:...postIds)`, { postIds })
+      .where(`post.deletedAt is null`)
+      .andWhere(`post.id IN (:...postIds)`, { postIds })
       .getMany();
 
     const postMap: { [key: string]: Comment[] } = {};
@@ -63,6 +68,7 @@ export class PostsRepository extends Repository<Post> {
       .leftJoinAndSelect('post.person', 'person')
       .leftJoinAndSelect('post.family', 'family')
       .leftJoinAndSelect('post.comments', 'comments')
+      .where(`post.deletedAt is null`)
       .getMany();
   }
 
@@ -72,7 +78,7 @@ export class PostsRepository extends Repository<Post> {
         ...post,
       },
       {
-        deleteAt: new Date(),
+        deletedAt: new Date(),
       },
     );
     const deletedPost = await this.save(deletePost);
