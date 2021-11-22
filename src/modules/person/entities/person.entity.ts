@@ -19,6 +19,15 @@ export class Person {
   @Field(() => [String])
   profileImageUrl: string;
 
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  deletedAt: Date;
+
   @OneToMany(() => Post, (post) => post.person)
   @Field(() => [Post])
   posts: Post[];
