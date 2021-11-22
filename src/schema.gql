@@ -119,12 +119,12 @@ input UpdatePersonInput {
 }
 
 input UpdatePostInput {
-  content: String
-  familyId: Int
+  content: String!
+  familyId: Int!
   id: Int!
-  personId: Int
-  photoUrls: [String!]
-  title: String
-  videoUrls: [String!]
-  viewCount: Int
+  personId: Int!
+  photoUrls: [String!]!
+  title: String!
+  videoUrls: [String!]!
+  viewCount: Int!
 }

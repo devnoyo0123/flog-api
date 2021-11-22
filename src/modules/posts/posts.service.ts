@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { CreatePostInput } from './dto/create-post.input';
-import { UpdatePostInput } from './dto/update-post.input';
+import { CreatePostInput, UpdatePostInput } from './dto/posts.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostsRepository } from './posts.repository';
 import { FamiliesRepository } from '../families/families.repository';
 import { PersonRepository } from '../person/person.repository';
+import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
@@ -53,12 +53,32 @@ export class PostsService {
     return foundPost;
   }
 
-  update(id: number, updatePostInput: UpdatePostInput) {
-    return `This action updates a #${id} post`;
+  async update(id: number, updatePostInput: UpdatePostInput) {
+    this.logger.debug(`
+    update(dto: ${JSON.stringify(updatePostInput)}`);
+    const familyId = updatePostInput.familyId;
+
+    const family = await this.familiesRepository.findById(familyId);
+    if (family === undefined) {
+      throw new HttpException(
+        `id: ${familyId}인 가족이 존재하지 않습니다.`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const personId = updatePostInput.personId;
+    const person = await this.personRepository.findById(personId);
+    if (person === undefined) {
+      throw new HttpException(
+        `id: ${personId}인 가족이 존재하지 않습니다.`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return this.postsRepository.updateOne(updatePostInput, family, person);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: number) {
+    const post: Post = await this.postsRepository.findById(id);
+    return this.postsRepository.deleteOne(post);
   }
 
   async batchComments(postIds: readonly number[]) {

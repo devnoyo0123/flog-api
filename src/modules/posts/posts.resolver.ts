@@ -9,8 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
-import { CreatePostInput } from './dto/create-post.input';
-import { UpdatePostInput } from './dto/update-post.input';
+import { CreatePostInput, UpdatePostInput } from './dto/posts.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentsRepository } from '../comments/comments.repository';
 import { Comment } from '../comments/entities/comment.entity';

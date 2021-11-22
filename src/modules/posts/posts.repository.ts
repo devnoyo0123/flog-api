@@ -1,10 +1,10 @@
 import { Post } from './entities/post.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { CreatePostInput } from './dto/create-post.input';
 import { Logger } from '@nestjs/common';
 import { Family } from '../families/entities/families.entity';
 import { Person } from '../person/entities/person.entity';
 import { Comment } from '../comments/entities/comment.entity';
+import { CreatePostInput, UpdatePostInput } from './dto/posts.dto';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {
@@ -25,6 +25,22 @@ export class PostsRepository extends Repository<Post> {
     const savedPost = await this.save(createPost);
     this.logger.debug(`포스트 생성 결과 : ${JSON.stringify(savedPost)}`);
     return savedPost;
+  }
+
+  async updateOne(dto: UpdatePostInput, family: Family, person: Person) {
+    const updatePost = Object.assign(
+      { ...dto },
+      {
+        family,
+        person,
+      },
+      {
+        updatedAt: new Date(),
+      },
+    );
+    const updatedPost = await this.save(updatePost);
+    this.logger.debug(`포스트 수정 결과 : ${JSON.stringify(updatedPost)}`);
+    return updatedPost;
   }
 
   findById(id: number): Promise<Post> {
@@ -48,5 +64,19 @@ export class PostsRepository extends Repository<Post> {
       .leftJoinAndSelect('post.family', 'family')
       .leftJoinAndSelect('post.comments', 'comments')
       .getMany();
+  }
+
+  async deleteOne(post: Post) {
+    const deletePost = Object.assign(
+      {
+        ...post,
+      },
+      {
+        deleteAt: new Date(),
+      },
+    );
+    const deletedPost = await this.save(deletePost);
+    this.logger.debug(`포스트 삭제 결과 : ${JSON.stringify(deletedPost)}`);
+    return deletedPost;
   }
 }
