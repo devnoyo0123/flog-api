@@ -9,6 +9,7 @@ FROM node:14 as build
 WORKDIR /usr/src/app
 
 # npm install을 위한 파일 복사합니다.
+RUN ls -al
 COPY package.json ./
 COPY yarn.lock ./
 
@@ -29,7 +30,7 @@ RUN yarn build
 FROM node:14-alpine
 
 # /usr/src/app 폴더를 WORKDIR로 설정
-WORKDIR /usr/src/app/
+WORKDIR /usr/src/app
 
 # build phase에서 소스 복사
 COPY --from=build /usr/src/app/dist ./dist
