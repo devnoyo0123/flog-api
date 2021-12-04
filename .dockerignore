@@ -1,0 +1,13 @@
+# 로컬에서 빌드한 결과폴더입니다.
+dist
+
+# 로컬 개발용입니다.
+.env.*
+
+# docker image 에서 install 해야하므로 build context 로 전송할 필요가 없습니다.
+node_modules
+npm-debug.log.*
+npm-debug.log
+.git
+.gitignore
+README.md
