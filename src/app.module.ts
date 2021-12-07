@@ -10,6 +10,7 @@ import { FamiliesModule } from './modules/families/families.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { PersonModule } from './modules/person/person.module';
 import { CommentsModule } from './modules/comments/comments.module';
+import { CryptoModule } from './common/crypto/crypto.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { CommentsModule } from './modules/comments/comments.module';
       }),
       inject: [ConfigService],
     }),
+    CryptoModule,
     FamiliesModule,
     PostsModule,
     PersonModule,

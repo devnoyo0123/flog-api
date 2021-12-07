@@ -12,8 +12,20 @@ export class Person {
   id: number;
 
   @Column()
-  @Field()
+  @Field(() => String)
   name: string;
+
+  @Column()
+  @Field(() => String)
+  password: string;
+
+  @Column()
+  @Field(() => String)
+  email: string;
+
+  @Column({ nullable: true })
+  @Field()
+  description: string;
 
   @Column({ type: 'jsonb', nullable: true })
   @Field(() => [String])

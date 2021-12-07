@@ -30,8 +30,17 @@ input CreateFamilyInput {
 }
 
 input CreatePersonInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """한줄소개"""
+  description: String
+
+  """이메일"""
+  email: String!
+
+  """이름"""
+  name: String!
+
+  """패스워드"""
+  password: String!
 }
 
 input CreatePostInput {
@@ -70,11 +79,14 @@ type Mutation {
 }
 
 type Person {
+  description: String!
+  email: String!
   families: [Family!]!
 
   """id"""
   id: Int!
   name: String!
+  password: String!
   posts: [Post!]!
   profileImageUrl: [String!]!
 }
@@ -113,9 +125,18 @@ input UpdateFamilyInput {
 }
 
 input UpdatePersonInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """한줄소개"""
+  description: String
+
+  """이메일"""
+  email: String
   id: Int!
+
+  """이름"""
+  name: String
+
+  """패스워드"""
+  password: String
 }
 
 input UpdatePostInput {
