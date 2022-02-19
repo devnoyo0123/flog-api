@@ -1,28 +1,20 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { FamiliesModule } from './modules/families/families.module';
-import { PostsModule } from './modules/posts/posts.module';
-import { PersonModule } from './modules/person/person.module';
-import { CommentsModule } from './modules/comments/comments.module';
+
 import { CryptoModule } from './common/crypto/crypto.module';
+import { PostsModule } from './modules/posts.module';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { HttpResponseInterceptor } from './common/interceptor/http-response.interceptor';
+import { AllExceptionsFilter } from './common/exception/exception.filter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-    }),
-    GraphQLModule.forRoot({
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      subscriptions: {
-        'subscriptions-transport-ws': true,
-      },
-      sortSchema: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -44,13 +36,22 @@ import { CryptoModule } from './common/crypto/crypto.module';
       }),
       inject: [ConfigService],
     }),
-    CryptoModule,
-    FamiliesModule,
     PostsModule,
-    PersonModule,
-    CommentsModule,
+    CryptoModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    Logger,
+    ConfigService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpResponseInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {}
