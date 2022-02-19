@@ -37,7 +37,7 @@ COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./
 
 # 포트 설정
-EXPOSE 3001
+EXPOSE 4000
 
 # 실행할 명령어
 ENTRYPOINT ["yarn", "start:prod"]
